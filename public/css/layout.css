@@ -1,0 +1,8 @@
+.nav-center {
+  margin: 0 auto !important;
+}
+
+.date-picker {
+  position: relative;
+  top: 16px;
+}

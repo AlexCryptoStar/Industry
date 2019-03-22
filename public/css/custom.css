@@ -1,0 +1,39 @@
+/* Add here all your CSS customizations */
+.nav-center {
+  margin: 0 auto !important;
+}
+
+.date-picker {
+  position: relative;
+  top: 16px;
+}
+
+input[name="daterange"] {
+  outline: none;
+  border-radius: 8px;
+  border: solid 1px #ff9800;
+  width: 170px;
+  text-align: center;
+}
+
+input[type='search']{
+  border-radius: 13px;
+  outline: none;
+  border: solid 1px #ff079c;  
+  text-align: center;
+}
+
+.nav-link {
+  cursor: pointer;
+}
+
+#undo_basic {
+  cursor: pointer;
+  left: 8px;
+  position: relative;
+}
+
+#undo_basic i:hover {
+  transition-duration: 0.2s;
+  font-size: large;
+}
