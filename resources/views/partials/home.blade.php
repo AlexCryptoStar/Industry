@@ -51,10 +51,7 @@
                                     </td>
                                     <td>{{$val->name}}</td>
                                     <td>
-                                        @if ($val->amount_change == 1) 入库
-                                        @elseif ($val->amount_change == 2) 出库 
-                                        @elseif ($val->amount_change == 3) 移库
-                                        @elseif ($val->amount_change == 4) 空
+                                        @if ($val->amount_change == 0) 最终
                                         @endif
                                     </td>
                                     <td>{{$val->standard}}</td>
@@ -86,7 +83,7 @@
                     <div class="modal fade" id="dataModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-scrollable" role="document">
                             <div class="modal-content">
-                            <div class="modal-header">
+                            <div class="modal-header align-items-center">
                                 <h5 class="modal-title" id="exampleModalScrollableTitle">Data Registion</h5>
                             </div>
                             <div class="modal-body">
@@ -95,12 +92,6 @@
                                         <label class="col-sm-3 text-left text-sm-right mb-0">品名</label>
                                         <div class="col-sm-9">
                                             {!! Form::text('name', '', ['class' => 'form-control', 'placeholder' => '品名...', 'required']) !!}
-                                        </div>
-                                    </div>
-                                    <div class="form-group row align-items-center">
-                                        <label class="col-sm-3 text-left text-sm-right mb-0">库存变动缘由</label>
-                                        <div class="col-sm-9">
-                                            {!! Form::select('amount_change', array('1' => '入库'), ['class' => 'form-control']) !!}
                                         </div>
                                     </div>
                                     <div class="form-group row align-items-center">
@@ -162,7 +153,7 @@
                         <div class="modal-dialog modal-dialog-scrollable" role="document">
                             <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalScrollableTitle">Data Registion</h5>
+                                <h5 class="modal-title" id="exampleModalScrollableTitle">Data Modify</h5>
                             </div>
                             <div class="modal-body">
                                 {!! Form::open(['class' => 'mb-4', 'url' => '/update', 'id' => 'editModal', 'data-toggle' => 'validator', 'enctype' => 'multipart/form-data']) !!}
@@ -170,7 +161,7 @@
                                     <div class="form-group row align-items-center">
                                         <label class="col-sm-3 text-left text-sm-right mb-0">品名</label>
                                         <div class="col-sm-9">
-                                            {!! Form::text('name', '', ['class' => 'form-control', 'placeholder' => '品名...', 'required']) !!}
+                                            {!! Form::text('name', '', ['class' => 'form-control', 'placeholder' => '品名...', 'disabled' => 'disabled', 'required']) !!}
                                         </div>
                                     </div>
                                     <div class="form-group row align-items-center">

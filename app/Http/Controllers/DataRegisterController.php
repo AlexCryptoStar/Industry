@@ -25,7 +25,6 @@ class DataRegisterController extends Controller {
 
         $this->validate($request, [
             'name' => 'required',
-            'amount_change' => 'required',
             'standard' => 'required',
             'material' => 'required',
             'count' => 'required',
@@ -46,7 +45,7 @@ class DataRegisterController extends Controller {
 
         $dataRegistry->img_url = $image_url;
         $dataRegistry->name = $request->input('name');
-        $dataRegistry->amount_change = intval($request->input('amount_change'));
+        $dataRegistry->amount_change = 0;
         $dataRegistry->standard = $request->input('standard');
         $dataRegistry->material = $request->input('material');
         $dataRegistry->count = $request->input('count');
@@ -62,7 +61,7 @@ class DataRegisterController extends Controller {
         $dataRecord = new DataRecordModel;
         $dataRecord->img_url = $image_url;
         $dataRecord->name = $request->input('name');
-        $dataRecord->amount_change = $request->input('amount_change');
+        $dataRecord->amount_change = 1;
         $dataRecord->standard = $request->input('standard');
         $dataRecord->material = $request->input('material');
         $dataRecord->count = $request->input('count');
@@ -136,6 +135,7 @@ class DataRegisterController extends Controller {
             ->where( 'id', $request->input('id') )
             ->update([
                 'img_url' => $image_url,
+                'amount_change' => 0,
                 'name' => $request->input('name'),
                 'standard' => $request->input('standard'),
                 'material' => $request->input('material'),
