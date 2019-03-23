@@ -15,6 +15,7 @@ class PagesController extends Controller {
         $getData = $dataRegistry->get();
         $sorted = $getData->sortByDesc('created_at');
 
+
         return view('partials.app')->with( 'data', $sorted );
     }
 

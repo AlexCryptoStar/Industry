@@ -166,7 +166,7 @@ return [
         /*
          * Package Service Providers...
          */
-
+        Larva\TencentCloud\TencentCloudServiceProvider::class,
         /*
          * Application Service Providers...
          */

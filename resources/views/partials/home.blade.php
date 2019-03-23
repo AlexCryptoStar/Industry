@@ -8,7 +8,7 @@
                     <div class="row">
                         <div class="col-md-12 align-self-center p-static order-2 text-center">
                             <div class="overflow-hidden pb-2">
-                                <div class="text-dark font-weight-bold text-3 appear-animation" data-appear-animation="maskUp" data-appear-animation-delay="100">联系方式：上海宝山区宝钢一村26号201室 &nbsp;&nbsp; 服务热线：13795375098 ( 王雷 ) &nbsp;&nbsp; 传真：021-56129586 &nbsp;&nbsp; 公司网站: www.xy-100.com</div>
+                                <div class="text-dark font-weight-bold text-3 ">联系方式：上海宝山区宝钢一村26号201室 &nbsp;&nbsp; 服务热线：13795375098 ( 王雷 ) &nbsp;&nbsp; 传真：021-56129586 &nbsp;&nbsp; 公司网站: www.xy-100.com</div>
                             </div>
                         </div>
                     </div>
@@ -23,9 +23,10 @@
         <div class="row">
             <div class="col-lg-9">
                 <table id="table_id" class="display">
-                    <thead>
+                    <thead id="table_head">
                         <tr>
                             <th>Action</th>
+                            <th>证明</th>
                             <th>品名</th>
                             <th>库存变动缘由</th>
                             <th>规格</th>
@@ -44,6 +45,9 @@
                                         <button type="button" rel="tooltip" onclick="openModal({{$val->id}})" id="btn_edit" class="btn btn-success btn-round btn-just-icon btn-sm" >
                                             Edit
                                         </button>
+                                    </td>
+                                    <td>
+                                        <img onclick="proofImageModal(this)" src="https://{{$val->img_url}}" style="width:30px;"/>
                                     </td>
                                     <td>{{$val->name}}</td>
                                     <td>
@@ -65,6 +69,11 @@
                     </tbody>
                 </table>
             </div>
+            <!-- The Modal -->
+            <div id="myModal" class="proof-modal">
+                <span class="close">&times;</span>
+                <img class="proof-modal-content" id="img01">
+            </div>
 
             <div class="col-lg-3">
                 <aside class="sidebar">
@@ -81,7 +90,7 @@
                                 <h5 class="modal-title" id="exampleModalScrollableTitle">Data Registion</h5>
                             </div>
                             <div class="modal-body">
-	                            {!! Form::open(['class' => 'mb-4', 'url' => '/submit', 'id' => 'submitModal', 'data-toggle' => 'validator']) !!}
+	                            {!! Form::open(['class' => 'mb-4', 'url' => '/submit', 'id' => 'submitModal', 'data-toggle' => 'validator', 'enctype' => 'multipart/form-data']) !!}
                                     <div class="form-group row align-items-center">
                                         <label class="col-sm-3 text-left text-sm-right mb-0">品名</label>
                                         <div class="col-sm-9">
@@ -133,7 +142,8 @@
                                     <div class="form-group row">
                                         <label class="col-sm-3 text-left text-sm-right mb-0">Proof Document</label>
                                         <div class="col-sm-9">
-                                            <input id="input-b2" name="proof" type="file" class="file" data-show-preview="false">    
+                                            <input id="image" name="image" type="file" class="file" data-show-preview="false" require>
+                                            <span id="alertP"></span>
                                         </div>
                                     </div>
                                     
@@ -155,7 +165,7 @@
                                 <h5 class="modal-title" id="exampleModalScrollableTitle">Data Registion</h5>
                             </div>
                             <div class="modal-body">
-                                {!! Form::open(['class' => 'mb-4', 'url' => '/update', 'id' => 'editModal', 'data-toggle' => 'validator']) !!}
+                                {!! Form::open(['class' => 'mb-4', 'url' => '/update', 'id' => 'editModal', 'data-toggle' => 'validator', 'enctype' => 'multipart/form-data']) !!}
                                     {!! Form::hidden('id', '', ['class' => 'form-control']) !!}
                                     <div class="form-group row align-items-center">
                                         <label class="col-sm-3 text-left text-sm-right mb-0">品名</label>
@@ -220,6 +230,13 @@
                                             {!! Form::text('manufacture', '', ['class' => 'form-control', 'placeholder' => '生产厂家...', 'required']) !!}
                                         </div>
                                     </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 text-left text-sm-right mb-0">Proof Document</label>
+                                        <div class="col-sm-9">
+                                            <input id="updateImage" name="updateImage" type="file" class="file" data-show-preview="false" required="">
+                                            <span id="alertPU"></span>
+                                        </div>
+                                    </div>
                                     <button type="submit" id="updateSubmit" class="d-none">Submit</button>
 	                            {!! Form::close() !!}
                             </div>
@@ -242,7 +259,7 @@
                     <!-- ...End Date Picker -->
 
                     <h5 class="font-weight-bold"><strong></strong></h5>
-                    <ul class="nav nav-list flex-column sort-source mb-5" data-sort-id="portfolio" data-option-key="filter" data-plugin-options="{'layoutMode': 'fitRows', 'filter': '*'}">
+                    <ul class="nav nav-list flex-column sort-source mb-5 date-list" data-sort-id="portfolio" data-option-key="filter" >
                     </ul>
                 </aside>
             </div>

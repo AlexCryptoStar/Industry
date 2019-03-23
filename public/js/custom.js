@@ -26,14 +26,14 @@ $(document).ready( function () {
                 extend: 'excel',
                 footer: true,
                 exportOptions: {
-                    columns: [1, 2, 3, 4, 5, 6, 7, 8]
+                    columns: [2, 3, 4, 5, 6, 7, 8, 9]
                 }
             },
             {
                 extend: 'print',
                 footer: true,
                 exportOptions: {
-                    columns: [1, 2, 3, 4, 5, 6, 7, 8]
+                    columns: [2, 3, 4, 5, 6, 7, 8, 9]
                 }
             },
         ],
@@ -44,22 +44,41 @@ $(document).ready( function () {
         "scrollX": true,
         "columns": [
             { "width": "10px" },
+            { "width": "50px" },
             { "width": "80px" },
             { "width": "100px" },
             { "width": "70px" },
             { "width": "80px" },
             { "width": "70px" },
             { "width": "70px" },
-            { "width": "90px" },
+            { "width": "100px" },
             { "width": "100px" },
         ],
     } );
     
     // save button click via trigger submit button.
     $('#cargoRegist').click(function(){
-        $('#cargoSubmit').trigger('click', function() {
-            $('#cargoRegist').attr('disabled', 'disabled');
-        });
+        
+        // validation only image.
+        var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
+        if ($("#image").val() == '' || $.inArray($("#image").val().split('.').pop().toLowerCase(), fileExtension) == -1) { 
+            if ($("#image").val() == '') {
+                $('#alertP').html("Please select proof document image.").css('color', 'red');
+            } else {
+                $('#alertP').html("Can entry *.jpeg, *.jpg, *.png, *.gif, *.bmp files.").css('color', 'red');
+            }
+            setTimeout(function() {
+                $('#count').css("border", "solid 1px #ced4da");
+                $('#alertP').html("");
+            }, 2000);
+            $("#image").val('').focus();
+            return;
+        } else {
+            $('#cargoSubmit').trigger('click', function() {
+                $('#cargoRegist').attr('disabled', 'disabled');
+            });
+        }
+
     });
     
     // save button click when update the row 
@@ -108,8 +127,22 @@ $(document).ready( function () {
             }
         }
 
-        $('#updateSubmit').trigger('click');
+        var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
+        if ( $("#updateImage").val() !== '' && $.inArray($("#updateImage").val().split('.').pop().toLowerCase(), fileExtension) == -1 ) { 
+            
+            $('#alertPU').html("Can entry *.jpeg, *.jpg, *.png, *.gif, *.bmp files.").css('color', 'red');
+            setTimeout(function() {
+                $('#alertPU').html("");
+            }, 2000);
+            $("#image").val('').focus();
+            return;
+        }
+
+        $('#updateSubmit').trigger('click', function() {
+            $('#cargoRegist').attr('disabled', 'disabled');
+        });
     });
+
 } );
 
 function openModal(param) {
@@ -150,16 +183,21 @@ function getDataByDate(e, date) {
         url: '/getDataByDate',
         data: {date: date},
         success: function (data) {
+            
+            var table = $('#table_id').DataTable(); 
+            table.clear().draw();
 
-            var array = $.map(data, function(value, index) {
-                return [value];
+            var array = [];
+            $.map(data, function(value, index) {
+                array.unshift(value);
             });
-            var list = '';
+
             $.map(array, function(element) {                
                 var reason = element.amount_change == 1 ? '入库' : '出库';
-                var tr = "<tr><td style='text-align: center;'>"+
+                var tr = "<td style='text-align: center;'>"+
                             '<button type="button" rel="tooltip" disabled=disabled id="btn_edit" class="btn btn-success btn-round btn-just-icon btn-sm" >Edit</button>'+
                         '</td>'+
+                        '<td><img onclick="proofImageModal(this)" src="https://'+ element.img_url + '" style="width:30px;"/></td>' +
                         '<td>'+ element.name +'</td>' +
                         '<td>'+ reason +'</td>' +
                         '<td>'+ element.standard +'</td>'+
@@ -167,10 +205,11 @@ function getDataByDate(e, date) {
                         '<td>'+ element.count +'</td>'+
                         '<td>'+ element.weight +'</td>'+
                         '<td>'+ element.length +'</td>'+
-                        '<td>'+ element.manufacture +'</td></tr>';
-                list += tr;
+                        '<td>'+ element.manufacture +'</td>';
+                var jRow = $('<tr>').append(tr);
+    
+                table.row.add( jRow ).draw();
             });
-            $('#datatable').html( list );
         }
     });
 }
@@ -191,7 +230,7 @@ function getDateList( date ) {
                 });
                 $('.nav-list').html(list);
             } else {
-                var list = "<li class='nav-item' ><a class='nav-link'>Doesn't exist date</a></li>";
+                var list = "<li class='nav-item' ><a class='nav-link'>Doesn't exist record</a></li>";
                 $('.nav-list').html(list);
             }
         }
@@ -201,4 +240,22 @@ function getDateList( date ) {
 // go initial datatable.
 function undoBasic() {
     location.reload();
+}
+
+// Rows Proof image modal
+function proofImageModal(e) {
+    
+    var modal = document.getElementById('myModal');
+    var modalImg = document.getElementById("img01");
+    $('#datatable td:nth-child(2)').click(function(){
+        modal.style.display = "block";
+        modalImg.src = $(this).find('img').attr('src');
+    });
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() { 
+        modal.style.display = "none";
+    }
 }
