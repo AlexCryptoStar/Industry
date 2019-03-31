@@ -31,6 +31,13 @@ input[type='search']{
   margin-top: 1.5rem;
 }
 
+.proof-img {
+  width: 28px;
+  height: 28px;
+  border: solid 1px #11111185;
+  border-radius: 3px;
+}
+
 #undo_basic {
   cursor: pointer;
   left: 8px;

@@ -26,14 +26,14 @@ $(document).ready( function () {
                 extend: 'excel',
                 footer: true,
                 exportOptions: {
-                    columns: [2, 3, 4, 5, 6, 7, 8, 9]
+                    columns: [2, 3, 4, 5, 6, 7, 8, 9, 10]
                 }
             },
             {
                 extend: 'print',
                 footer: true,
                 exportOptions: {
-                    columns: [2, 3, 4, 5, 6, 7, 8, 9]
+                    columns: [2, 3, 4, 5, 6, 7, 8, 9, 10]
                 }
             },
         ],
@@ -53,6 +53,7 @@ $(document).ready( function () {
             { "width": "70px" },
             { "width": "100px" },
             { "width": "100px" },
+            { "width": "100px" },
         ],
     } );
     
@@ -61,23 +62,29 @@ $(document).ready( function () {
         
         // validation only image.
         var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
-        if ($("#image").val() == '' || $.inArray($("#image").val().split('.').pop().toLowerCase(), fileExtension) == -1) { 
-            if ($("#image").val() == '') {
-                $('#alertP').html("Please select proof document image.").css('color', 'red');
-            } else {
-                $('#alertP').html("Can entry *.jpeg, *.jpg, *.png, *.gif, *.bmp files.").css('color', 'red');
-            }
-            setTimeout(function() {
-                $('#count').css("border", "solid 1px #ced4da");
-                $('#alertP').html("");
-            }, 2000);
-            $("#image").val('').focus();
+        
+        if ($("#image").val() == '') {
+            $('#alertP').html("Please select proof document image.").css('color', 'red');
             return;
-        } else {
-            $('#cargoSubmit').trigger('click', function() {
-                $('#cargoRegist').attr('disabled', 'disabled');
-            });
         }
+        var input = document.getElementById('image');
+        for ( var i = 0; i < input.files.length; i++) {
+            
+            if ( $.inArray(input.files[i].name.split('.').pop().toLowerCase(), fileExtension) == -1 ) { 
+                
+                $('#alertP').html("Can entry *.jpeg, *.jpg, *.png, *.gif, *.bmp files.").css('color', 'red');
+                setTimeout(function() {
+                    $('#count').css("border", "solid 1px #ced4da");
+                    $('#alertP').html("");
+                }, 2000);
+                $("#image").val('').focus();
+                return;
+            }
+        }
+        
+        $('#cargoSubmit').trigger('click', function() {
+            $('#cargoRegist').attr('disabled', 'disabled');
+        });
 
     });
     
@@ -85,13 +92,28 @@ $(document).ready( function () {
     $('#cargoUpdate').click(function(){
         
         var selectedAmount = $('#update_amount select[name="amount_change"]').val();
+        console.log(selectedAmount);
 
         if ( selectedAmount == 2 ) {
+
             var count = $('#count').val();
             var countShow = $('input[name="count_show"]').val();
-            if ( parseInt(countShow) < parseInt(count) ) {
+            if ( parseInt(count) < 0 ) {
+                
                 $('#count').css("border", "solid 1px red");
-                $('#alert').html("Please input small value than current value.").css('color', 'red');
+                $('#alert').html("Please entry correct amount.").css('color', 'red');
+                setTimeout(function() {
+                    $('#count').css("border", "solid 1px #ced4da");
+                    $('#alert').html("");
+                }, 1500);
+                $('#count').val('').focus();
+                return false;
+            } 
+
+            if ( parseInt(countShow) < parseInt(count) ) {
+
+                $('#count').css("border", "solid 1px red");
+                parseInt(countShow) == 0 ? $('#alert').html("Doesn't enough the amount").css('color', 'red') : $('#alert').html("Please input small value than current value.").css('color', 'red');
                 setTimeout(function() {
                     $('#count').css("border", "solid 1px #ced4da");
                     $('#alert').html("");
@@ -102,9 +124,22 @@ $(document).ready( function () {
             
             var weight = $('#weight').val();
             var weightShow = $('input[name="weight_show"]').val();
-            if ( parseInt(weightShow) < parseInt(weight) ) {
+            if ( parseInt(weight) < 0 ) {
+                
                 $('#weight').css("border", "solid 1px red");
-                $('#alertW').html("Please input small value than current value.").css('color', 'red');
+                $('#alertW').html("Please entry correct amount.").css('color', 'red');
+                setTimeout(function() {
+                    $('#weight').css("border", "solid 1px #ced4da");
+                    $('#alertW').html("");
+                }, 1500);
+                $('#weight').val('').focus();
+                return false;
+            }
+
+            if ( parseInt(weightShow) < parseInt(weight) ) {
+
+                $('#weight').css("border", "solid 1px red");
+                parseInt(weightShow) ? $('#alertW').html("Doesn't enough the amount").css('color', 'red') : $('#alertW').html("Please input small value than current value.").css('color', 'red');
                 setTimeout(function() {
                     $('#weight').css("border", "solid 1px #ced4da");
                     $('#alertW').html("");
@@ -115,9 +150,22 @@ $(document).ready( function () {
             
             var length = $('#length').val();
             var lengthShow = $('input[name="length_show"]').val();
-            if ( parseInt(lengthShow) < parseInt(length) ) {
+            if ( parseInt(length) < 0 ) {
+                
                 $('#length').css("border", "solid 1px red");
-                $('#alertL').html("Please input small value than current value.").css('color', 'red');
+                $('#alertL').html("Please entry correct amount.").css('color', 'red');
+                setTimeout(function() {
+                    $('#length').css("border", "solid 1px #ced4da");
+                    $('#alertL').html("");
+                }, 1500);
+                $('#length').val('').focus();
+                return false;
+            } 
+
+            if ( parseInt(lengthShow) < parseInt(length) ) {
+
+                $('#length').css("border", "solid 1px red");
+                parseInt(lengthShow) == 0 ? $('#alertL').html("Doesn't enough the amount").css('color', 'red') : $('#alert').html("Please input small value than current value.").css('color', 'red');
                 setTimeout(function() {
                     $('#length').css("border", "solid 1px #ced4da");
                     $('#alertL').html("");
@@ -127,15 +175,30 @@ $(document).ready( function () {
             }
         }
 
-        var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
-        if ( $("#updateImage").val() !== '' && $.inArray($("#updateImage").val().split('.').pop().toLowerCase(), fileExtension) == -1 ) { 
-            
-            $('#alertPU').html("Can entry *.jpeg, *.jpg, *.png, *.gif, *.bmp files.").css('color', 'red');
+        if ($("#updateImage").val() == '') {
+            $('#alertPU').html("Please select proof document image.").css('color', 'red');
             setTimeout(function() {
+                $('#count').css("border", "solid 1px #ced4da");
                 $('#alertPU').html("");
             }, 2000);
-            $("#image").val('').focus();
-            return;
+            return false;
+        }
+        
+        // validation only image.
+        var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
+        var input = document.getElementById('updateImage');
+        for ( var i = 0; i < input.files.length; i++) {
+            
+            if ( $.inArray(input.files[i].name.split('.').pop().toLowerCase(), fileExtension) == -1 ) { 
+                
+                $('#alertPU').html("Can upload only *.jpeg, *.jpg, *.png, *.gif, *.bmp files.").css('color', 'red');
+                setTimeout(function() {
+                    $('#count').css("border", "solid 1px #ced4da");
+                    $('#alertPU').html("");
+                }, 2000);
+                $("#updateImage").val('').focus();
+                return;
+            }
         }
 
         $('#updateSubmit').trigger('click', function() {
@@ -165,6 +228,7 @@ function openModal(param) {
                 $('input[name="weight_show"]').val(data[0].weight);
                 $('input[name="length_show"]').val(data[0].length);
                 $('input[name="manufacture"]').val(data[0].manufacture);
+                $('input[name="note"]').val(data[0].note);
             }
         });
 
@@ -193,11 +257,22 @@ function getDataByDate(e, date) {
             });
 
             $.map(array, function(element) {                
+
                 var reason = element.amount_change == 1 ? '入库' : '出库';
+                var img_urls = element.img_url.split('|');
+                img_urls.pop();
+
+                var note = element.note ? element.note : '';                
+
+                var img_url = '';
+                $.map(img_urls, function(val) {
+                    img_url += '<img class="proof-img" onclick="proofImageModal(this)" src="https://'+ val + '"/>';
+                })
+
                 var tr = "<td style='text-align: center;'>"+
                             '<button type="button" rel="tooltip" disabled=disabled id="btn_edit" class="btn btn-success btn-round btn-just-icon btn-sm" >Edit</button>'+
                         '</td>'+
-                        '<td><img onclick="proofImageModal(this)" src="https://'+ element.img_url + '" style="width:30px;"/></td>' +
+                        '<td>' + img_url + '</td>' +
                         '<td>'+ element.name +'</td>' +
                         '<td>'+ reason +'</td>' +
                         '<td>'+ element.standard +'</td>'+
@@ -205,7 +280,8 @@ function getDataByDate(e, date) {
                         '<td>'+ element.count +'</td>'+
                         '<td>'+ element.weight +'</td>'+
                         '<td>'+ element.length +'</td>'+
-                        '<td>'+ element.manufacture +'</td>';
+                        '<td>'+ element.manufacture +'</td>'+
+                        '<td>'+ note +'</td>';
                 var jRow = $('<tr>').append(tr);
     
                 table.row.add( jRow ).draw();
@@ -247,10 +323,9 @@ function proofImageModal(e) {
     
     var modal = document.getElementById('myModal');
     var modalImg = document.getElementById("img01");
-    $('#datatable td:nth-child(2)').click(function(){
-        modal.style.display = "block";
-        modalImg.src = $(this).find('img').attr('src');
-    });
+    modal.style.display = "block";
+    modalImg.src = e.src;
+    
     // Get the <span> element that closes the modal
     var span = document.getElementsByClassName("close")[0];
 
